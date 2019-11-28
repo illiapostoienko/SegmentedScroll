@@ -38,7 +38,7 @@ final class SegmentedScrollView: UIView {
     private var sliderLeading: NSLayoutConstraint!
     private var sliderTrailing: NSLayoutConstraint!
     
-    private var segments: [Segment] = []
+    private var segments: [Segment]!
     private var selectedSegment: Segment!
     
     private let hundredPercents: CGFloat = 100
@@ -71,17 +71,14 @@ final class SegmentedScrollView: UIView {
     func setup(with segmentToView: SegmentNameToView,
                fontSize: CGFloat = 16,
                buttonFont: UIFont? = nil,
-               normalColor: UIColor? = nil,
-               selectedColor: UIColor? = nil,
+               normalColor: UIColor = UIColor.gray,
+               selectedColor: UIColor = UIColor.blue,
                segmentsStackSpacing: CGFloat = 10)
     {
-        
         guard self.segments.isEmpty else { return assertionFailure("Segments are already set!") }
         if segmentToView.isEmpty { assertionFailure("No passed segments to set in control") }
         
         let buttonFont = buttonFont ?? UIFont.systemFont(ofSize: fontSize, weight: .regular)
-        let normalColor = normalColor ?? UIColor.gray
-        let selectedColor = selectedColor ?? UIColor.blue
         
         segments = buildSegments(segmentToView: segmentToView, normalColor: normalColor, selectedColor: selectedColor, font: buttonFont)
         
