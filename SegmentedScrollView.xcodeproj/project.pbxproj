@@ -12,6 +12,9 @@
 		D74186B8238D5DDD00178618 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D74186B6238D5DDD00178618 /* Main.storyboard */; };
 		D74186BA238D5DE000178618 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D74186B9238D5DE000178618 /* Assets.xcassets */; };
 		D74186BD238D5DE000178618 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D74186BB238D5DE000178618 /* LaunchScreen.storyboard */; };
+		D74186C6238D5E0700178618 /* SegmentedScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D74186C5238D5E0700178618 /* SegmentedScrollView.swift */; };
+		D7A68537238D7667008A5ACF /* ColorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7A68535238D7667008A5ACF /* ColorViewController.swift */; };
+		D7A68538238D7667008A5ACF /* ColorViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D7A68536238D7667008A5ACF /* ColorViewController.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,6 +25,9 @@
 		D74186B9238D5DE000178618 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D74186BC238D5DE000178618 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D74186BE238D5DE000178618 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D74186C5238D5E0700178618 /* SegmentedScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentedScrollView.swift; sourceTree = "<group>"; };
+		D7A68535238D7667008A5ACF /* ColorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorViewController.swift; sourceTree = "<group>"; };
+		D7A68536238D7667008A5ACF /* ColorViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ColorViewController.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,6 +60,8 @@
 		D74186B1238D5DDD00178618 /* SegmentedScrollView */ = {
 			isa = PBXGroup;
 			children = (
+				D7A68532238D75E3008A5ACF /* ColorViewController */,
+				D74186C4238D5DF200178618 /* SegmentScrollView */,
 				D74186B2238D5DDD00178618 /* AppDelegate.swift */,
 				D74186B4238D5DDD00178618 /* ViewController.swift */,
 				D74186B6238D5DDD00178618 /* Main.storyboard */,
@@ -62,6 +70,23 @@
 				D74186BE238D5DE000178618 /* Info.plist */,
 			);
 			path = SegmentedScrollView;
+			sourceTree = "<group>";
+		};
+		D74186C4238D5DF200178618 /* SegmentScrollView */ = {
+			isa = PBXGroup;
+			children = (
+				D74186C5238D5E0700178618 /* SegmentedScrollView.swift */,
+			);
+			path = SegmentScrollView;
+			sourceTree = "<group>";
+		};
+		D7A68532238D75E3008A5ACF /* ColorViewController */ = {
+			isa = PBXGroup;
+			children = (
+				D7A68535238D7667008A5ACF /* ColorViewController.swift */,
+				D7A68536238D7667008A5ACF /* ColorViewController.xib */,
+			);
+			path = ColorViewController;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -124,6 +149,7 @@
 			files = (
 				D74186BD238D5DE000178618 /* LaunchScreen.storyboard in Resources */,
 				D74186BA238D5DE000178618 /* Assets.xcassets in Resources */,
+				D7A68538238D7667008A5ACF /* ColorViewController.xib in Resources */,
 				D74186B8238D5DDD00178618 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -136,6 +162,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				D74186B5238D5DDD00178618 /* ViewController.swift in Sources */,
+				D74186C6238D5E0700178618 /* SegmentedScrollView.swift in Sources */,
+				D7A68537238D7667008A5ACF /* ColorViewController.swift in Sources */,
 				D74186B3238D5DDD00178618 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
