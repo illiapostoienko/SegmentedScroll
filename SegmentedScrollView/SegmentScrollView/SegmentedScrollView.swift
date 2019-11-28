@@ -30,9 +30,10 @@ final class SegmentedScrollView: UIView {
         let scrollView = UIScrollView()
         scrollView.delegate = self
         scrollView.showsHorizontalScrollIndicator = false
-        scrollView.alwaysBounceVertical = false
         return scrollView
     }()
+    
+    private lazy var contentView: UIView = { return UIView() }()
 
     private var sliderLeading: NSLayoutConstraint!
     private var sliderTrailing: NSLayoutConstraint!
@@ -52,8 +53,6 @@ final class SegmentedScrollView: UIView {
         commonInit()
     }
     
-    deinit { unsubscribeFromNotifications() }
-    
     override func layoutSubviews() {
         super.layoutSubviews()
         setupScrollView()
@@ -62,16 +61,19 @@ final class SegmentedScrollView: UIView {
     override func draw(_ rect: CGRect) {
         super.draw(rect)
         switchToSegment(selectedSegment)
+        setupScrollView()
     }
     
     override class var requiresConstraintBasedLayout: Bool { return true }
+    
+    deinit { unsubscribeFromNotifications() }
     
     func setup(with segmentToView: SegmentNameToView,
                fontSize: CGFloat = 16,
                buttonFont: UIFont? = nil,
                normalColor: UIColor? = nil,
                selectedColor: UIColor? = nil,
-               segmentsStackSpacing: CGFloat? = 10)
+               segmentsStackSpacing: CGFloat = 10)
     {
         
         guard self.segments.isEmpty else { return assertionFailure("Segments are already set!") }
@@ -80,26 +82,16 @@ final class SegmentedScrollView: UIView {
         let buttonFont = buttonFont ?? UIFont.systemFont(ofSize: fontSize, weight: .regular)
         let normalColor = normalColor ?? UIColor.gray
         let selectedColor = selectedColor ?? UIColor.blue
-        let segmentsStackSpacing = segmentsStackSpacing ?? .zero
         
         segments = buildSegments(segmentToView: segmentToView, normalColor: normalColor, selectedColor: selectedColor, font: buttonFont)
         
-        setupSegmentsUI(selectedColor: selectedColor, segmentsStackSpacing: segmentsStackSpacing)
+        setupSegmentsUI(selectedColor: selectedColor,
+                        segmentsStackSpacing: segmentsStackSpacing)
         
         segments.first.map {
             selectedSegment = $0
             switchToSegment($0)
         }
-    }
-    
-    @objc private func segmentPressed(sender: UIButton) {
-        guard let segmentToShow = segments.first(where: { $0.button === sender })
-            else { return }
-        
-        switchToSegment(segmentToShow)
-        scrollToSegment(segmentToShow)
-        
-        selectedSegment = segmentToShow
     }
 }
 
@@ -142,6 +134,16 @@ extension SegmentedScrollView {
         return button
     }
     
+    @objc private func segmentPressed(sender: UIButton) {
+        guard let segmentToShow = segments.first(where: { $0.button === sender })
+            else { return }
+        
+        switchToSegment(segmentToShow)
+        scrollToSegment(segmentToShow)
+        
+        selectedSegment = segmentToShow
+    }
+    
     private func setupSegmentsUI(selectedColor: UIColor, segmentsStackSpacing: CGFloat) {
         segments.forEach{ self.segmentsStackView.addArrangedSubview($0.button) }
         segmentsStackView.spacing = segmentsStackSpacing
@@ -172,16 +174,45 @@ extension SegmentedScrollView: UIScrollViewDelegate {
         scrollViewContainer.contentSize = CGSize(width: scrollViewContainer.frame.width * CGFloat(segments.count),
                                                  height: scrollViewContainer.frame.height)
         scrollViewContainer.isPagingEnabled = true
-        
-        
+
+        scrollViewContainer.addSubview(contentView)
+        contentView.frame.size = CGSize(width: scrollViewContainer.frame.width * CGFloat(segments.count),
+                                        height: scrollViewContainer.frame.height)
+        contentView.layoutMargins = .zero
+        contentView.translatesAutoresizingMaskIntoConstraints = false
+        contentView.topAnchor.constraint(equalTo: scrollViewContainer.topAnchor).isActive = true
+        contentView.bottomAnchor.constraint(equalTo: scrollViewContainer.bottomAnchor).isActive = true
+        contentView.leadingAnchor.constraint(equalTo: scrollViewContainer.leadingAnchor).isActive = true
+        contentView.trailingAnchor.constraint(equalTo: scrollViewContainer.trailingAnchor).isActive = true
+        contentView.heightAnchor.constraint(equalTo: scrollViewContainer.heightAnchor).isActive = true
+        contentView.widthAnchor.constraint(equalTo: scrollViewContainer.widthAnchor).isActive = true
         
         segments.forEach { segment in
             segment.view.translatesAutoresizingMaskIntoConstraints = false
-            segment.view.frame = CGRect(x: scrollViewContainer.frame.width * CGFloat(segment.index), y: 0,
-                                width: scrollViewContainer.frame.width, height: scrollViewContainer.frame.height)
+
+            segment.view.frame = CGRect(x: contentView.frame.width * CGFloat(segment.index),
+                                        y: 0,
+                                        width: contentView.frame.width,
+                                        height: contentView.frame.height)
             
+            contentView.addSubview(segment.view)
             
-            scrollViewContainer.addSubview(segment.view)
+            if segment.index == 0 {
+                segment.view.leadingAnchor.constraint(equalTo: contentView.leadingAnchor).isActive = true
+                
+            } else {
+                let previousView = segments[segment.index - 1].view
+                segment.view.leadingAnchor.constraint(equalTo: previousView.trailingAnchor).isActive = true
+            }
+            
+            segment.view.heightAnchor.constraint(equalTo: contentView.heightAnchor).isActive = true
+            segment.view.widthAnchor.constraint(equalTo: contentView.widthAnchor).isActive = true
+            segment.view.topAnchor.constraint(equalTo: contentView.topAnchor).isActive = true
+            segment.view.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).isActive = true
+            
+            if segments.endIndex == segment.index {
+                segment.view.trailingAnchor.constraint(equalTo: contentView.trailingAnchor).isActive = true
+            }
         }
     }
     
@@ -218,7 +249,7 @@ extension SegmentedScrollView: UIScrollViewDelegate {
     }
 }
 
-//MARK: - Private Setup Methods
+//MARK: - Local Setup Methods
 extension SegmentedScrollView {
     private func commonInit() {
         translatesAutoresizingMaskIntoConstraints = false
