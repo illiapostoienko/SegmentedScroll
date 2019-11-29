@@ -35,7 +35,9 @@ class ViewController: UIViewController {
         
         container.setup(with: ["First": firstPage.view,
                                "Second": secondPage.view,
-                               "Third": thirdPage.view],
+                               "Third": thirdPage.view,
+                               "Last": fourthPage.view,
+                               "Last": fifthPage.view],
                         normalColor: UIColor.green,
                         selectedColor: UIColor.red)
     }
